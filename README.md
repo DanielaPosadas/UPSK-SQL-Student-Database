@@ -69,10 +69,10 @@ elementos esenciales en el diseño de una base de datos
 `ls` - Conocer los archivos que están en el proyecto
 `cp archivo_original archivo_nuevo` - Copiar información de un archivo a otro nuevo
 `rm archivo_a_eliminar` - Eliminar archivo innecesarios
-`Touch nombre_del_archivo.sh` - Crear un nuevo archivo sh
+`touch nombre_del_archivo.sh` - Crear un nuevo archivo sh
 `chmod +x nombre_de_archivo.sh` - Dar los permisos necesarios al archivo de ejecutar scripts.
 
-# Tutorial 1
+# TUTORIAL 1
 
 ## Paso 1
 Imprimir en la terminal 'hello SQL'.
@@ -403,18 +403,390 @@ Hemos terminado la base de datos, por que lo se debe colocar en la terminal un c
 
 
 
+# TUTORIAL 2
 
+## Paso 1
+Para inicializar la terminal.
+   `echo hello SQL`
 
+## Paso 2
+Para acceder a psql.
+   `psql --username=freecodecamp --dbname=postgres`
 
+## Paso 3
+Abrir una segunda terminal para traer la base de datos sql.
+   `psql -U postgres < students.sql`
 
+## Paso 4
+Consultar todas las bases de datos existentes.
+   `\l`
 
+## Paso 5
+Conectar con la base de datos students.
+   `\c students`
 
+## Paso 6
+Mostrar las columnas que tiene nuestra tabla students.
+   `\d students`
 
+## Paso 7
+Mostrar toda la información de nuestra tabla students.
+   `SELECT * FROM students;`
 
+## Paso 8
+Para visualizar la columna de nombres de la tabla students.
+   `SELECT first_name FROM students;`
 
+## Paso 9
+Realizar diferentes consultas a nuestra tabla students:
+   `SELECT first_name, last_name, gpa FROM students;`
+   `SELECT first_name, last_name, gpa FROM students WHERE gpa < 2.5;`
+   `SELECT first_name, last_name, gpa FROM students WHERE gpa >= 3.8;`
+   `SELECT first_name, last_name, gpa FROM students WHERE gpa != 4.0;`
 
+Visualizar todas las columnas de la tabla students que tengan last_name antes de la letra M.
+   `SELECT * FROM students WHERE last_name < 'M';`
 
+Visualizar todas las columnas de la tabla students que tengan last_name antes de la letra M o que tengan un gpa igual a 3.9 	(alguna de las dos condiciones es verdadera, no ambas):
+   `SELECT * FROM students WHERE last_name < 'M' OR gpa = 3.9;`
 
-   
+Visualizar todas las columnas de la tabla students que tengan last_name antes de la letra M o que tengan un gpa igual a 3.9 	(ambas condiciones son verdaderas).
+   `SELECT * FROM students WHERE last_name < 'M' AND  gpa = 3.9;`
+
+Visualizar todas las columnas de la tabla students que tengan last_name antes de la letra M o que tengan un gpa igual a 3.9 o menor a 2.3 (aquí las tres condiciones se cumplen de cierta forma).
+   `SELECT * FROM students WHERE last_name < 'M' AND  gpa = 3.9 OR gpa < 2.3;`
+
+Visualizar todas las columnas de la tabla students que tengan last_name antes de la letra M y que tengan un gpa igual a 3.9 o menor a 2.3 (aquí sólo se cumplen dos condiciones, que la letra sea antes de la M y que su gpa sea igual a 3.9 o menor a 2.3).
+   `SELECT * FROM students WHERE last_name < 'M' AND  (gpa = 3.9 OR gpa < 2.3);`
+
+Visualizar las filas de estudiantes donde su gpa tenga un valor NULL, es decir, que no contenga nada.
+   `SELECT * FROM students WHERE gpa IS NULL;`
+
+Visualizar las filas de estudiantes donde su gpa tenga NO TENGA valor NULL, es decir, que sí tenga un valor.
+   `SELECT * FROM students WHERE gpa IS NOT NULL;`
+
+Visualizar a los estudiantes que no han elegido una carrera.
+   `SELECT * FROM students WHERE major_id IS NULL;`
+
+Visualizar a los estudiantes que no han elegido una carrera, pero no incluir a los que no tienen un gpa.
+   `SELECT * FROM students WHERE major_id IS NULL AND gpa IS NOT NULL;`
+
+Visualizar a los estudiantes que no han elegido una carrera y no tienen un gpa.
+   `SELECT * FROM students WHERE major_id IS NULL AND gpa IS NULL;`
+
+Ordenar las gpa de manera ascendente.
+   `SELECT * FROM students ORDER BY gpa;`
+
+Ordenar las gpa de manera ascendente.
+   `SELECT * FROM students ORDER BY gpa DESC;`
+
+Ordenar las gpa de mayor a menor y a su vez el first_name de manera ascendente.
+   `SELECT * FROM students ORDER BY gpa DESC, first_name;`
+
+Ordenar las gpa de mayor a menor y a su vez el first_name de manera ascendente, agregando un límite de 10.
+   `SELECT * FROM students ORDER BY gpa DESC, first_name LIMIT 10;`
+
+Excluir a los estudiantes que NO tiene gpa, luego ordenar las gpa de mayor a menor y a su vez el first_name de manera ascendente, agregando un límite de 10.
+   `SELECT * FROM students WHERE gpa IS NOT NULL ORDER BY gpa DESC, first_name LIMIT 10;`
+
+Seleccionar el valor más bajo de gpa en la tabla estudiantes.
+   `SELECT MIN(gpa) FROM students;`
+
+Seleccionar el valor más alto de gpa en la tabla estudiantes.
+   `SELECT MAX(gpa) FROM students;`
+
+Devuelve la suma total de todos los valores en la columna major_id.
+   `SELECT SUM(major_id) FROM students;`
+
+Devuelve el promedio de todos los valores en la columna major_id.
+   `SELECT AVG(major_id) FROM students;`
+
+Redondea el valor del promedio hacia arriba (CEIL), al entero más cercano. No importa si la parte decimal es menor de 0.5; siempre redondeará hacia arriba.
+   `SELECT CEIL(AVG(major_id)) FROM students;`
+
+Si la parte decimal es 0.5 o mayor (ROUND), redondeará hacia arriba; si es menor de 0.5, redondeará hacia abajo.
+   `SELECT ROUND(AVG(major_id)) FROM students;`
+
+Podemos indicarle el número de decimales que queremos luego del punto, en este caso son 5 decimales.
+   `SELECT ROUND(AVG(major_id), 5) FROM students;`
+
+Devuelve la cantidad de majors (filas) dentro de nuestra tabla majors.
+   `SELECT COUNT(*) FROM majors;`
+
+Devuelve la cantidad de estudiantes dentro de la tabla students.
+   `SELECT COUNT(*) FROM students;`
+
+Devuelve cuántos estudiantes seleccionaron una carrera en la tabla students.
+   `SELECT COUNT(major_id) FROM students;`
+
+Devuelve los valores únicos de major_id de la tabla students sin repetirlos.
+   `SELECT DISTINCT(major_id) FROM students;`
+
+Devuelve los valores únicos de major_id de la tabla students agrupándolos, de esta manera son únicos.
+   `SELECT major_id FROM students GROUP BY major_id;`
+
+Devuelve los valores correspondientes a la columna major_id contando cuántos estudiantes pertenecen a ése major agrupándolo con un GROUP BY y devolviendo valores únicos.
+   `SELECT major_id, COUNT(*) FROM students GROUP BY major_id;`
+
+Devuelve los valores correspondientes a la columna major_id, además de los valores mínimos del gpa en cada major, agrupándolo con un GROUP BY y devolviendo valores únicos.
+   `SELECT major_id, MIN(gpa) FROM students GROUP BY major_id;`
+
+Devuelve los valores correspondientes a la columna major_id, además de los valores mínimos  y máximos del gpa en cada major, agrupándolo con un GROUP BY y devolviendo valores únicos.
+   `SELECT major_id, MIN(gpa), MAX(gpa) FROM students GROUP BY major_id;`
+
+Devuelve los valores correspondientes a la columna major_id, además de los valores mínimos  y máximos del gpa en cada major, agrupándolo con un GROUP BY y devolviendo valores únicos. Finalmente agrega una última condición devolviendo sólo los que tengan un gpa igual a 4.0.
+   `SELECT major_id, MIN(gpa), MAX(gpa) FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;`
+
+Devuelve los valores correspondientes a la columna major_id, además de los valores mínimos  y máximos del gpa en cada major, agrupándolo con un GROUP BY y devolviendo valores únicos. Finalmente agrega una última condición devolviendo sólo los que tengan un gpa igual a 4.0. El cambio aquí es que renombre la columna min(gpa) a min_gpa.
+   `SELECT major_id, MIN(gpa) as min_gpa, MAX(gpa) FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;`
+
+Devuelve los valores correspondientes a la columna major_id, además de los valores mínimos  y máximos del gpa en cada major, agrupándolo con un GROUP BY y devolviendo valores únicos. Finalmente agrega una última condición devolviendo sólo los que tengan un gpa igual a 4.0. El cambio aquí es que renombre la columna max(gpa) a max_gpa.
+   `SELECT major_id, MIN(gpa) as min_gpa, MAX(gpa) as max_gpa FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;`
+
+Devuelve la columna major_id y el número de estudiantes en cada major renombrado la columna como number_of_students, el major_id lo agrupa con group by.
+   `SELECT major_id, COUNT(*) as number_of_students FROM students GROUP BY major_id;`
+
+Devuelve la columna major_id y el número de estudiantes en cada major renombrado la columna como number_of_students, el major_id lo agrupa con group by, agregando un último filtro con having donde sólo se muestren las filas con un numero de estudiantes menor a 8.
+   `SELECT major_id, COUNT(*) as number_of_students FROM students GROUP BY major_id HAVING COUNT(*) < 8;`
+
+Uniendo ambas tablas (students y majors) con la foreign key que es major_id. Usando FULL JOIN se unen ambas tablas ya sea que tengan o no una fila que use esa clave externa en la otra, es decir, que alguna de las filas este vacía.
+   `SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;`
+
+En este caso sólo muestra todas las filas de la tabla de la derecha, en este caso de students, y omite las filas vacías o nulas de la tabla de la derecha, es decir, majors.
+   `SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id;`
+
+En este caso sólo muestra todas las filas de la tabla de la derecha, en este caso de majors, y omite las filas vacías o nulas de la tabla de la izquierda, es decir, students.
+   `SELECT * FROM students RIGHT JOIN majors ON students.major_id = majors.major_id;`
+
+Aquí sólo devuelve la información que esté presente en ambas tablas.
+   `SELECT * FROM students INNER JOIN majors ON students.major_id = majors.major_id;`
+
+Muestra todos los majors, pero NO muestra a los estudiantes que no tienen un major.
+   `SELECT * FROM majors LEFT JOIN students ON majors.major_id = students.major_id;`
+
+Devuelve los estudiantes que están inscritos o tiene un major y los majors que tienen estudiantes:
+   `SELECT * FROM students INNER JOIN majors ON students.major_id= majors.major_id;`
+
+Muestra a todos los estudiantes, pero no devuelve todos los majors vacíos.
+   `SELECT * FROM majors RIGHT JOIN students ON majors.major_id = students.major_id;`
+
+Devuelve todas las filas de cada tabla, estén vacías o no.
+   `SELECT * FROM majors FULL JOIN students ON majors.major_id = students.major_id;`
+
+Devuelve todos los majors a los que pertenecen los estudiantes uniendo ambas tablas.
+   `SELECT * FROM students INNER JOIN majors ON students.major_id = majors.major_id;`
+
+Devuelve la columna major de la tabla majors aplicando un INNER JOIN para unir ambas tablas por la columna major_id.
+   `SELECT major FROM majors INNER JOIN students ON students.major_id = majors.major_id;`
+
+Devuelve los valores únicos de majors sin repetirlos utilizando DISTINCT.
+   `SELECT DISTINCT(major) FROM majors INNER JOIN students ON students.major_id = majors.major_id;`
+
+Devuelve todas las columnas de los estudiantes que tienen un major.
+   `SELECT * FROM students RIGHT JOIN majors ON majors.major_id = students.major_id;`
+
+Devuelve todas las columnas de los majors que no tengan estudiantes inscritos.
+   `SELECT * FROM students RIGHT JOIN majors ON majors.major_id = students.major_id WHERE student_id IS NULL;`
+
+Devuelve sólo la columna major de los que no tienen estudiantes inscritos.
+   `SELECT major FROM majors LEFT JOIN students ON majors.major_id = students.major_id WHERE student_id IS NULL`
+
+Devuelve los estudiantes inscritos a un major.
+   `SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id;`
+
+Devuelve los estudiantes que estén inscritos en el major Data Science o tengan un gpa igual o mayor a 3.8.
+   `SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id WHERE major = 'Data Science' OR gpa >= 3.8;`
+
+Utiliza un FULL JOIN para unir las tablas students y majors devolviendo todas las columnas de ambas tablas.
+   `SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;`
+
+Retoma la query anterior e implementa un LIKE para buscar los majors o first_name que contengan ‘ri’.
+   `SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR major LIKE
+   '%ri%';`
+
+Retoma el query anterior y selecciona únicamente la columna first_name y major.
+   `SELECT first_name, major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR
+   major LIKE '%ri%';`
+
+Devuelve todas las filas de las tablas students y majors con un FULL JOIN.
+   `SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;`
+
+Devuelve la columna major_id de la tabla students.
+   `SELECT students.major_id FROM students FULL JOIN majors ON students.major_id = majors.major_id;`
+
+Renombra la tabla majors como ‘m’ y hace un FULL JOIN utilizando la tabla renombrada m.major_id.
+   `SELECT students.major_id FROM students FULL JOIN majors AS m ON students.major_id = m.major_id;`
+
+Renombra la tabla students como ‘s’ y hace un FULL JOIN utilizando la tabla renombrada s.major_id.
+   `SELECT s.major_id FROM students AS s FULL JOIN majors AS m ON s.major_id = m.major_id;`
+
+Devuelve la tabla students y majors pero utiliza un USING(foreign key de ambas tablas) para unirlas y hacer el query más simple.
+   `SELECT * FROM students FULL JOIN majors USING(major_id);`
+
+Unir tres tablas con el uso de USING y la foreign key major_id.
+   `SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id);`
+
+Devuelve los resultados de las cuatro tablas students, majors, majors_courses y courses utilizando USING y FULL JOIN.
+   `SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id) FULL JOIN courses
+    USING(course_id);`
+
+## Paso 10
+Para visualizar la columna de nombres de la tabla majors.
+   `SELECT * FROM majors;`
+
+## Paso 11
+Realizar diferentes consultas a nuestra tabla majors:
+   `SELECT * FROM majors WHERE major  = 'Game Design';`
+
+Visualizar los majors que no tengan el nombre ‘Game Design’.
+   `SELECT * FROM majors WHERE major != 'Game Design';`
+
+Visualizar valores en la columna major que están después de 'Game Design' en orden alfabético.
+   `SELECT * FROM majors WHERE major > 'Game Design';`
+
+Visualizar valores en la columna major que están después de 'Game Design' en orden alfabético, incluso el mismo Game Design.
+   `SELECT * FROM majors WHERE major >= 'Game Design';`
+
+Visualizar valores en la columna major que están antes de la letra ‘G’.
+   `SELECT * FROM majors WHERE major < 'G';`
+
+## Paso 10
+Visualizar toda la información de la tabla courses:.
+   `SELECT * FROM courses;`
+
+## Paso 11
+Realizar diferentes consultas a nuestra tabla courses.
+
+Visualizar todas las columnas de la tabla courses utilizando LIKE para localizar los courses que tengan en el nombre el primer caracter, seguido de ‘lgorithms’ en el nombre.
+   `SELECT * FROM courses WHERE course LIKE '_lgorithms';`
+
+Visualizar los courses que terminen con ‘logarithms’.
+   `SELECT * FROM courses WHERE course LIKE '%lgorithms';`
+
+Visualizar los courses que empiecen con ‘Web’.
+   `SELECT * FROM courses WHERE course LIKE 'Web%’;`
+
+Visualizar los courses donde el segundo caracter sea una ‘e’.
+   `SELECT * FROM courses WHERE course LIKE '_e%';`
+
+Visualizar los courses que contengan un espacio en el nombre.
+   `SELECT * FROM courses WHERE course LIKE '% %';`
+
+Visualizar los courses que NO contengan un espacio en el nombre.
+   `SELECT * FROM courses WHERE course NOT LIKE '%  %';`
+
+Visualizar los courses que contengan una ‘A’ en el nombre (A mayúscula).
+   `SELECT * FROM courses WHERE course LIKE '%A%';`
+
+Visualizar los courses que contengan una ‘A’ en el nombre (ILIKE permite ignorar el capital case, en este caso es tanto alta como baja ‘A’ o ‘a’).
+   `SELECT * FROM courses WHERE course ILIKE '%A%';`
+
+Visualizar los courses que NO contengan una ‘A’ en el nombre (ILIKE permite ignorar el capital case, en este caso es tanto alta como baja ‘A’ o ‘a’).
+   `SELECT * FROM courses WHERE course NOT ILIKE '%A%';`
+
+Visualizar los courses que NO contengan una ‘A’ en el nombre (ILIKE permite ignorar el capital case, en este caso es tanto alta como baja ‘A’ o ‘a’) y contengan un espacio.
+   `SELECT * FROM courses WHERE course NOT ILIKE '%A%' AND course LIKE '%  %';`
+
+Visualizar los courses que NO contengan una ‘A’ en el nombre (ILIKE permite ignorar el capital case, en este caso es tanto alta como baja ‘A’ o ‘a’) y contengan un espacio.
+   `SELECT * FROM courses WHERE course NOT ILIKE '%A%' AND course LIKE '%  %';`
+
+# CREAR UN ARCHIVO SH PARA EJECUTAR SCRIPTS
+
+## Paso 1
+En una split terminal crear un archivo .sh para anotar scripts.
+   `touch student_info.sh`
+
+## Paso 2
+Dar los permisos necesarios para ejecutar scripts a mi archivo sh.
+   `chmod +x student_info.sh`
+
+## Paso 3
+Colocar el shebang para que permita ejecutar los scripts en el nuevo archivo sh.
+   `#!/bin/bash`
+
+## Paso 4
+Agregamos un comentario en nuestro archivo .sh y corremos el comando para visualizarlo en la terminal.
+   `echo -e "\n~~ My Computer Science Students ~~\n"`
+
+## Paso 5
+Agregar variable PSQL.
+   `PSQL="psql -X --username=freecodecamp --dbname=students --no-align --tuples-only -c"`
+
+## Paso 6
+Agregar una query que se imprima en la terminal.
+   `echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE gpa = 4.0;")"`
+
+## Paso 7
+Agregar un echo que imprima un comentario en la terminal.
+   `echo -e "\nAll course names whose first letter is before 'D' in the alphabet:"`
+
+## Paso 8
+Agregar un echo para visualizar la columna course de la tabla courses donde sólo mostrará los valores alfabéticamente menores a la
+    letra ‘D’.
+   `echo "$($PSQL "SELECT course FROM courses WHERE course < 'D'")"`
+
+## Paso 9
+Agregar un enunciado que se imprima en la consola.
+   `echo -e "\n\nFirst name, last name, and GPA of students whose last name begins with an 'R' or after and have a GPA greater than 3.8 or less than 2.0:"`
+
+## Paso 10
+Utilizamos el comando echo para imprimir en la consola el resultado de los estudiantes que cumplen con estas condiciones.
+   `echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE last_name >= 'R' AND (gpa > 3.8 OR gpa < 2.0)")"`
+
+## Paso 11
+Agregar un enunciado que se imprima en la consola.
+   `echo -e "\nLast name of students whose last name contains a case insensitive 'sa' or have an 'r' as the second to last letter:"`
+
+## Paso 12
+Utilizando el comando, un script que imprima los apellidos que contenga ‘sa’ y que la penúltima letra sea una ‘r’.
+   `echo "$($PSQL "SELECT last_name FROM students WHERE last_name ILIKE '%sa%' OR last_name LIKE '%r_'")"`
+
+## Paso 13
+Agregar un enunciado que se imprima en la consola.
+   `echo -e "\nFirst name, last name, and GPA of students who have not selected a major and either their first name begins with 'D' or they have a GPA greater than 3.0:"`
+
+## Paso 14
+Agrega un echo para visualizar a los estudiantes que no han seleccionado una carrera y además que su curso tiene una ‘D’ al inicio o su gpa es mayor a 3.0.
+   `echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE major_id IS NULL AND (first_name LIKE 'D%' OR gpa > 3.0)")"`
+
+## Paso 15
+Agregar un echo que imprima los nombres de los primeros 5 cursos ordenados en reversa alfabéticamente y que su segunda letra sea ‘e’ o la última sea ’s’.
+   `echo "$($PSQL "SELECT course FROM courses WHERE course LIKE '_e%' OR course LIKE '%s' ORDER BY course DESC LIMIT 5")"`
+
+## Paso 16
+Agrega un nuevo comentario.
+   `echo -e "\nAverage GPA of all students rounded to two decimal places:"`
+
+## Paso 17
+Agrega un echo a la instrucción anterior donde devuelve el promedio del gpa de la tabla students con dos decimales después del punto.
+   `echo -e "$($PSQL " SELECT ROUND(AVG(gpa), 2) FROM students")"`
+
+## Paso 18
+Agrega otro comentario con el comando echo.
+   `echo -e "\nMajor ID, total number of students in a column named 'number_of_students', and average GPA rounded to two decimal places in a column name 'average_gpa', for each major ID in the students table having a student count greater than 1:"`
+
+## Paso 19
+Agregar un echo que muestre major_id, el número de estudiantes renombrado como number_od_students, el promedio de gpa redondeo con dos decimales después del punto renombrado como average_gpa. Todo lo agrupamos por el major_id y agregamos una última condición donde se muestren sólo quieren tienen más de un estudiante.
+   `echo -e "$($PSQL " SELECT major_id, COUNT(*) as number_of_students, ROUND(AVG(gpa), 2) as average_gpa FROM students GROUP BY major_id HAVING COUNT(*) > 1")"`
+
+## Paso 20
+Agrega un nuevo comando echo para un comentario:
+   `echo -e "\nList of majors, in alphabetical order, that either no student is taking or has a student whose first name contains a case insensitive 'ma':"`
+
+## Paso 21
+Agrega un echo script que devuelve los majors que no tienen estudiantes inscritos y también los estudiantes tienen ‘ri’ en su nombre:
+   `echo "$($PSQL "SELECT major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE major IS NOT NULL AND (student_id IS NULL OR first_name ILIKE '%ma%') ORDER BY major")"`
+
+## Paso 22
+Agrega un echo con un query.
+   `echo "$($PSQL "SELECT DISTINCT(course) FROM students RIGHT JOIN majors USING(major_id) INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) WHERE (first_name = 'Obie' AND last_name = 'Hilpert') OR student_id IS NULL ORDER BY course DESC")"`
+
+## Paso 23
+Agrega comentario.
+   `echo -e "\nList of courses, in alphabetical order, with only one student enrolled:"`
+
+## Paso 24
+Agrega un echo más.
+   `echo "$($PSQL "SELECT course FROM students INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) GROUP BY course HAVING COUNT(student_id) = 1 ORDER BY course")"`
 
 ```
